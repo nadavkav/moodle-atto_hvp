@@ -1,3 +1,8 @@
 .atto_mediagallery_inputgallery {
     max-width: 300px;
 }
+
+.atto_mediagallery_button img {
+    width: 16px !important;
+    height: 16px !important;
+}
