@@ -17,16 +17,15 @@
 /**
  * Atto text editor integration version file.
  *
- * @package    atto_mediagallery
- * @copyright  2014 NetSpot Pty Ltd
- * @author     Adam Olley <adam.olley@netspot.com.au>
+ * @package    atto_hvp
+ * @author     Lea Cohen <leac@ort.org.il>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->version = 2014090900;
-$plugin->requires = 2014050800;
-$plugin->component = 'atto_mediagallery';
-$plugin->release = '2.7.0.0';
-$plugin->dependencies = array('mod_mediagallery' => 2014082501);
+$plugin->version = 2016062600;
+$plugin->requires = 2015042400;
+$plugin->component = 'atto_hvp';
+$plugin->release = '3.1.0.0';
+$plugin->dependencies = array('mod_hvp' => 2016051302);

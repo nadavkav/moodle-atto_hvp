@@ -15,17 +15,16 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Strings for component 'atto_mediagallery', language 'en'.
+ * Strings for component 'atto_hvp', language 'en'.
  *
- * @package    atto_mediagallery
- * @copyright  2014 NetSpot Pty Ltd
- * @author     Adam Olley <adam.olley@netspot.com.au>
+ * @package    atto_hvp
+ * @author     Lea Cohen <leac@ort.org.il>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-$string['gallery'] = 'Gallery';
-$string['insertgallery'] = 'Insert Media gallery';
-$string['nogalleries'] = 'Sorry, no galleries found to insert.';
-$string['pluginname'] = 'Media gallery';
-$string['select_desc'] = 'Select the gallery you want to insert below. Note, users may not be able to see the gallery if any of its visiblity options and/or the users permissions prevent them from seeing it.';
-$string['title'] = 'Select a Media gallery';
+$string['hvp'] = 'Hvp';
+$string['inserthvp'] = 'Insert H5P';
+$string['nohvps'] = 'Sorry, no hvps found to insert.';
+$string['pluginname'] = 'H5P';
+$string['select_desc'] = 'Select the hvp you want to insert below. Note, users may not be able to see the hvp if any of its visiblity options and/or the users permissions prevent them from seeing it.';
+$string['title'] = 'Select a H5P';

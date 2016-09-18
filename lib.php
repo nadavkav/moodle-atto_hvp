@@ -17,13 +17,12 @@
 /**
  * Atto text editor integration version file.
  *
- * @package    atto_mediagallery
- * @copyright  2014 NetSpot Pty Ltd
- * @author     Adam Olley <adam.olley@netspot.com.au>
+ * @package    atto_hvp
+ * @author     Lea Cohen <leac@ort.org.il>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-use \mod_mediagallery\collection;
+//use \mod_hvp\collection;
 
 defined('MOODLE_INTERNAL') || die();
 
@@ -31,25 +30,67 @@ defined('MOODLE_INTERNAL') || die();
  * Initialise this plugin
  * @param string $elementid
  */
-function atto_mediagallery_strings_for_js() {
+function atto_hvp_strings_for_js() {
     global $PAGE;
 
-    $PAGE->requires->strings_for_js(array('gallery',
-                                          'insertgallery',
-                                          'nogalleries',
-                                          'select_desc',
-                                          'title'),
-                                    'atto_mediagallery');
+    $PAGE->requires->strings_for_js(array('hvp',
+        'inserthvp',
+        'nohvps',
+        'select_desc',
+        'title'),
+        'atto_hvp');
 }
 
-function atto_mediagallery_params_for_js($elementid, $options, $fpoptions) {
+function atto_hvp_params_for_js($elementid, $options, $fpoptions) {
     if ($options['context']->contextlevel < CONTEXT_COURSE) {
         return array();
     }
-    $galleries = collection::get_my_galleries_by_contextid($options['context']->id);
     $list = array();
-    foreach ($galleries as $id => $text) {
-        $list[] = array('id' => $id, 'text' => $text);
+    $hvps = get_my_hvps_by_contextid();
+    foreach ($hvps as $hvp) {
+        $list[] = array('id' => $hvp->id, 'text' => $hvp->name);
     }
-    return array('galleries' => $list);
+
+    return array('hvps' => $list);
+}
+
+// Load H5P list data
+function get_my_hvps_by_contextid() {
+    $h5ps = [];
+    global $DB, $PAGE;
+
+    $rawh5ps = $DB->get_records_sql("SELECT cm.id AS id,
+                                   --  cw.section,
+                                   --  cm.visible,
+                                     h.name
+                                   --  hl.title AS librarytitle
+                                FROM {course_modules} cm,
+                                     {course_sections} cw,
+                                     {modules} md,
+                                     {hvp} h,
+                                     {hvp_libraries} hl
+                               WHERE cm.course = ?
+                                 AND cm.instance = h.id
+                                 AND cm.section = cw.id
+                                 AND md.name = 'hvp'
+                                 AND md.id = cm.module
+                                 AND hl.id = h.main_library_id
+                             ", array($PAGE->course->id));
+
+    $modinfo = get_fast_modinfo($PAGE->course, NULL);
+    if (empty($modinfo->instances['hvp'])) {
+        $h5ps = $rawh5ps;
+    } else {
+        // Lets try to order these bad boys
+        foreach ($modinfo->instances['hvp'] as $cm) {
+            if (!$cm->uservisible || !isset($rawh5ps[$cm->id])) {
+                continue; // Not visible or not found
+            }
+            if (!empty($cm->extra)) {
+                $rawh5ps[$cm->id]->extra = $cm->extra;
+            }
+            $h5ps[] = $rawh5ps[$cm->id];
+        }
+    }
+    return $h5ps;
 }

@@ -1,5 +1,5 @@
 {
-    "moodle-atto_mediagallery-button": {
+    "moodle-atto_hvp-button": {
         "requires": [
             "moodle-editor_atto-plugin"
         ]

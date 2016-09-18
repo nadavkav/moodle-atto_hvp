@@ -1,7 +1,7 @@
 {
-  "name": "moodle-atto_mediagallery-button",
+  "name": "moodle-atto_hvp-button",
   "builds": {
-    "moodle-atto_mediagallery-button": {
+    "moodle-atto_hvp-button": {
       "jsfiles": [
         "button.js"
       ]

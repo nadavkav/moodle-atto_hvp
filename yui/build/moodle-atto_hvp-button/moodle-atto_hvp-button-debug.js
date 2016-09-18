@@ -1,4 +1,4 @@
-YUI.add('moodle-atto_mediagallery-button', function (Y, NAME) {
+YUI.add('moodle-atto_hvp-button', function (Y, NAME) {
 
 // This file is part of Moodle - http://moodle.org/
 //
@@ -16,56 +16,54 @@ YUI.add('moodle-atto_mediagallery-button', function (Y, NAME) {
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /*
- * @package    atto_mediagallery
- * @copyright  2014 NetSpot Pty Ltd
- * @author     Adam Olley <adam.olley@netspot.com.au>
+ * @package    atto_hvp
+ * @author     Lea Cohen <leac@ort.org.il>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 /**
- * @module moodle-atto_mediagallery-button
+ * @module moodle-atto_hvp-button
  */
 
 /**
- * Atto text editor mediagallery plugin.
+ * Atto text editor hvp plugin.
  *
- * @namespace M.atto_mediagallery
+ * @namespace M.atto_hvp
  * @class button
  * @extends M.editor_atto.EditorPlugin
  */
 
-var COMPONENTNAME = 'atto_mediagallery',
+var COMPONENTNAME = 'atto_hvp',
     CSS = {
-        INPUTGALLERY: 'atto_mediagallery_inputgallery'
+        INPUTHVP: 'atto_hvp_inputhvp'
     },
     SELECTORS = {
-        INPUTGALLERY: '.atto_mediagallery_inputgallery'
+        INPUTHVP: '.atto_hvp_inputhvp'
     },
     TEMPLATE = '' +
-            '<form class="atto_form">' +
-                '{{get_string "select_desc" component}}<br/><br/>' +
-                '{{#if galleries}}' +
-                    '<label for="{{elementid}}_atto_mediagallery_">{{get_string "gallery" component}}</label>' +
-                    '<select class="{{CSS.INPUTGALLERY}}" id="{{elementid}}_mediagallery_inputgallery">' +
-                        '{{#each galleries}}' +
-                            '<option value="{{id}}">{{text}}</option>' +
-                        '{{/each}}' +
-                    '</select>' +
+        '<form class="atto_form">' +
+            '{{get_string "select_desc" component}}<br/><br/>' +
+            '{{#if hvps}}' +
+                '<label for="{{elementid}}_atto_hvp_">{{get_string "hvp" component}}</label>' +
+                '<select class="{{CSS.INPUTHVP}}" id="{{elementid}}_hvp_inputhvp">' +
+                    '{{#each hvps}}' +
+                        '<option value="{{id}}">{{text}}</option>' +
+                    '{{/each}}' +
+                '</select>' +
+                '<br/>' +
+                '<div class="mdl-align">' +
                     '<br/>' +
-                    '<div class="mdl-align">' +
-                        '<br/>' +
-                        '<button type="submit" class="submit">{{get_string "insertgallery" component}}</button>' +
-                    '</div>' +
-                '{{else}}' +
-                    '{{get_string "nogalleries" component}}' +
-                '{{/if}}' +
-            '</form>',
+                    '<button type="submit" class="submit">{{get_string "inserthvp" component}}</button>' +
+                '</div>' +
+            '{{else}}' +
+                '{{get_string "nohvps" component}}' +
+            '{{/if}}' +
+        '</form>',
     IMAGETEMPLATE = '' +
-            '<a href="{{galleryurl}}" class="filter_mediagallery">' +
-                '<img src="{{imageurl}}" title="{{text}}" alt="{{id}}" data-gallery="{{id}}"/>' +
-            '</a>';
+        '<iframe src="{{hvpurl}}" class="filter_hvp" style="width:100%;border:0;">' + '</iframe>' +
+        '<script>var filter_hvp = Y.one(".filter_hvp");filter_hvp.on("load", function (e) {this._node.height = this._node.contentWindow.document.body.scrollHeight + \'px\';});</script>';
 
-Y.namespace('M.atto_mediagallery').Button = Y.Base.create('button', Y.M.editor_atto.EditorPlugin, [], {
+Y.namespace('M.atto_hvp').Button = Y.Base.create('button', Y.M.editor_atto.EditorPlugin, [], {
 
     /**
      * A reference to the current selection at the time that the dialogue
@@ -86,23 +84,23 @@ Y.namespace('M.atto_mediagallery').Button = Y.Base.create('button', Y.M.editor_a
      */
     _content: null,
 
-    initializer: function() {
-        // Add the mediagallery button first.
+    initializer: function () {
+        // Add the hvp button first.
         this.addButton({
             icon: 'icon',
-            iconComponent: 'atto_mediagallery',
+            iconComponent: 'atto_hvp',
             callback: this._displayDialogue
         });
 
     },
 
     /**
-     * Display the mediagallery editor.
+     * Display the hvp editor.
      *
      * @method _displayDialogue
      * @private
      */
-    _displayDialogue: function() {
+    _displayDialogue: function () {
         // Store the current selection.
         this._currentSelection = this.get('host').getSelection();
         if (this._currentSelection === false || this._currentSelection.collapsed) {
@@ -112,7 +110,7 @@ Y.namespace('M.atto_mediagallery').Button = Y.Base.create('button', Y.M.editor_a
         var dialogue = this.getDialogue({
             headerContent: M.util.get_string('pluginname', COMPONENTNAME),
             focusAfterHide: true,
-            focusOnShowSelector: SELECTORS.INPUTGALLERY
+            focusOnShowSelector: SELECTORS.INPUTHVP
         });
 
         // Set the dialogue content, and then show the dialogue.
@@ -128,29 +126,29 @@ Y.namespace('M.atto_mediagallery').Button = Y.Base.create('button', Y.M.editor_a
      * @return {Node} Node containing the dialogue content
      * @private
      */
-    _getDialogueContent: function() {
+    _getDialogueContent: function () {
         var template = Y.Handlebars.compile(TEMPLATE);
         this._content = Y.Node.create(template({
             component: COMPONENTNAME,
-            galleries: this.get('galleries'),
+            hvps: this.get('hvps'),
             CSS: CSS
         }));
 
         if (this._content.one('.submit')) {
-            this._content.one('.submit').on('click', this._insertmediagallery, this);
+            this._content.one('.submit').on('click', this._inserthvp, this);
         }
 
         return this._content;
     },
 
     /**
-     * The mediagallery was inserted, so make changes to the editor source.
+     * The hvp was inserted, so make changes to the editor source.
      *
-     * @method _insertmediagallery
+     * @method _inserthvp
      * @param {EventFacade} e
      * @private
      */
-    _insertmediagallery: function(e) {
+    _inserthvp: function (e) {
         var input,
             value,
             text,
@@ -163,7 +161,7 @@ Y.namespace('M.atto_mediagallery').Button = Y.Base.create('button', Y.M.editor_a
             focusAfterHide: null
         }).hide();
 
-        input = this._content.one('.atto_mediagallery_inputgallery');
+        input = this._content.one('.atto_hvp_inputhvp');
         text = input.get('text');
         value = input.get('value');
 
@@ -173,8 +171,7 @@ Y.namespace('M.atto_mediagallery').Button = Y.Base.create('button', Y.M.editor_a
             imagehtml = template({
                 id: value,
                 text: text,
-                imageurl: M.cfg.wwwroot + '/mod/mediagallery/pix/icon.gif',
-                galleryurl: M.cfg.wwwroot + '/mod/mediagallery/view.php?g=' + value
+                hvpurl: M.cfg.wwwroot + '/mod/hvp/view.php?id=' + value + '&isembedded=1'
             });
 
             host.insertContentAtFocusPoint(imagehtml);
@@ -190,13 +187,13 @@ Y.namespace('M.atto_mediagallery').Button = Y.Base.create('button', Y.M.editor_a
 }, {
     ATTRS: {
         /**
-         * The list of galleries to display.
+         * The list of hvps to display.
          *
-         * @attribute galleries
+         * @attribute hvps
          * @type array
          * @default {}
          */
-        galleries: {
+        hvps: {
             value: []
         }
     }
