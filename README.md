@@ -6,7 +6,7 @@ The plugin is a hack, as it relays on a patch to the stable version of H5P activ
 We are considering using a filter instead (WIP)
 
 This this plugin is based on an original code written by Adam Olley (adam.olley@netspot.com.au) for the University of New South Wales (http://www.unsw.edu.au).
-It was adoped by Nadav Kavalerchik and Lea Cohen (ORT R&D Israel) 
+It was adoped by [Nadav Kavalerchik](https://github.com/nadavkav/) and [Lea Cohen](https://github.com/leac) (ORT R&D Israel) 
 
 ##Install
 ### Getting it
