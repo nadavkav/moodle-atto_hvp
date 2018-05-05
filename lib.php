@@ -30,6 +30,15 @@ defined('MOODLE_INTERNAL') || die();
  * Initialise this plugin
  * @param string $elementid
  */
+
+function atto_hvp_get_capability() {
+    global $COURSE;
+
+    $context = context_course::instance($COURSE->id);
+
+    return has_capability('moodle/course:update', $context);
+}
+
 function atto_hvp_strings_for_js() {
     global $PAGE;
 
@@ -42,6 +51,7 @@ function atto_hvp_strings_for_js() {
 }
 
 function atto_hvp_params_for_js($elementid, $options, $fpoptions) {
+    $capability = atto_hvp_get_capability();
     if ($options['context']->contextlevel < CONTEXT_COURSE) {
         return array();
     }
@@ -51,7 +61,7 @@ function atto_hvp_params_for_js($elementid, $options, $fpoptions) {
         $list[] = array('id' => $hvp->id, 'text' => $hvp->name);
     }
 
-    return array('hvps' => $list);
+    return array('hvps' => $list, 'capability' => $capability);
 }
 
 // Load H5P list data
