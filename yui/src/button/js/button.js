@@ -58,8 +58,8 @@ var COMPONENTNAME = 'atto_hvp',
             '{{/if}}' +
         '</form>',
     IMAGETEMPLATE = '' +
-        '<iframe src="{{hvpurl}}" class="filter_hvp" id="hvp_{{id}}" style="width:100%; height:auto; border:0;" frameborder="0" allowfullscreen="allowfullscreen">' + '</iframe>' +
-        '<script src="/mod/hvp/library/js/h5p-resizer.js" charset="UTF-8"></script>';
+        '<iframe src="' + M.cfg.wwwroot + '{{hvpurl}}" class="filter_hvp" id="hvp_{{id}}" style="width:100%; height:auto; border:0;" frameborder="0" allowfullscreen="allowfullscreen">' + '</iframe>' +
+        '<script src="' + M.cfg.wwwroot + '/mod/hvp/library/js/h5p-resizer.js" charset="UTF-8"></script>';
 
 Y.namespace('M.atto_hvp').Button = Y.Base.create('button', Y.M.editor_atto.EditorPlugin, [], {
 

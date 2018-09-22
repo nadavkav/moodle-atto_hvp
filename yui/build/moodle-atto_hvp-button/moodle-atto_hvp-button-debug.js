@@ -60,8 +60,8 @@ var COMPONENTNAME = 'atto_hvp',
             '{{/if}}' +
         '</form>',
     IMAGETEMPLATE = '' +
-        '<iframe src="{{hvpurl}}" class="filter_hvp" style="width:100%;border:0;">' + '</iframe>' +
-        '<script>var filter_hvp = Y.one(".filter_hvp");filter_hvp.on("load", function (e) {this._node.height = this._node.contentWindow.document.body.scrollHeight + \'px\';});</script>';
+        '<iframe src="' + M.cfg.wwwroot + '{{hvpurl}}" class="filter_hvp" id="hvp_{{id}}" style="width:100%; height:auto; border:0;" frameborder="0" allowfullscreen="allowfullscreen">' + '</iframe>' +
+        '<script src="' + M.cfg.wwwroot + '/mod/hvp/library/js/h5p-resizer.js" charset="UTF-8"></script>';
 
 Y.namespace('M.atto_hvp').Button = Y.Base.create('button', Y.M.editor_atto.EditorPlugin, [], {
 
@@ -85,13 +85,18 @@ Y.namespace('M.atto_hvp').Button = Y.Base.create('button', Y.M.editor_atto.Edito
     _content: null,
 
     initializer: function () {
-        // Add the hvp button first.
-        this.addButton({
-            icon: 'icon',
-            iconComponent: 'atto_hvp',
-            callback: this._displayDialogue
-        });
+        var hascapability = this.get('capability'),
+            toolbarItems = [];
 
+        if (hascapability) {
+
+            // Add the hvp button first.
+            this.addButton({
+                icon: 'icon',
+                iconComponent: 'atto_hvp',
+                callback: this._displayDialogue
+            });
+        }
     },
 
     /**
@@ -171,7 +176,9 @@ Y.namespace('M.atto_hvp').Button = Y.Base.create('button', Y.M.editor_atto.Edito
             imagehtml = template({
                 id: value,
                 text: text,
-                hvpurl: M.cfg.wwwroot + '/mod/hvp/view.php?id=' + value + '&isembedded=1'
+                //hvpurl: M.cfg.wwwroot + '/mod/hvp/view.php?id=' + value + '&isembedded=1'
+                //hvpurl: M.cfg.wwwroot + '/mod/hvp/embed.php?id=' + value
+                hvpurl: '/mod/hvp/embed.php?id=' + value
             });
 
             host.insertContentAtFocusPoint(imagehtml);
@@ -194,6 +201,9 @@ Y.namespace('M.atto_hvp').Button = Y.Base.create('button', Y.M.editor_atto.Edito
          * @default {}
          */
         hvps: {
+            value: []
+        },
+        capability: {
             value: []
         }
     }
